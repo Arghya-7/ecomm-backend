@@ -1,6 +1,5 @@
 package com.ecommerce.controllers;
 
-import com.ecommerce.exception.EcommerceException;
 import com.ecommerce.model.User;
 import com.ecommerce.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +37,8 @@ public class UserController {
         try{
             return ResponseEntity.ok(userService.validateUser(user));
         } catch (Exception er){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(objectMapper.createObjectNode().put("message",er.getMessage())
+                                                    ,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

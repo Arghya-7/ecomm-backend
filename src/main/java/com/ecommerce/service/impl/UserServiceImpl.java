@@ -1,7 +1,6 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.components.EncryptionService;
-import com.ecommerce.exception.EcommerceException;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.UserService;
@@ -33,9 +32,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) throws EcommerceException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public User createUser(User user) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if(userRepository.findById(user.getId()).isPresent()){
-            throw new EcommerceException("User with ID " + user.getId() + " already exists.");
+            throw new RuntimeException("User with ID " + user.getId() + " already exists.");
         }
         user.setPassword(encryptionService.encrypt(user.getPassword()));
         return userRepository.save(user);

@@ -1,7 +1,6 @@
 package com.ecommerce.controllers;
 
 
-import com.ecommerce.exception.EcommerceException;
 import com.ecommerce.model.OrderDetails;
 import com.ecommerce.model.OrderRequest;
 import com.ecommerce.service.PaymentGatewayService;
