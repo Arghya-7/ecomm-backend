@@ -4,16 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("products")
+@CompoundIndexes({
+        @CompoundIndex(name = "text_index", def = "{ 'name':'text', 'description':'text'}")
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class Product {
     @Id
     private String id;
+    @TextIndexed
     private String name;
+    @TextIndexed
     private String description;
     private String image;
     private double price;

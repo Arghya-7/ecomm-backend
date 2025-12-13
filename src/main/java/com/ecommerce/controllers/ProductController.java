@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/products")
+@RestController
 @CrossOrigin("*")
 public class ProductController {
     ProductService productService;
@@ -25,7 +25,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
-    @GetMapping()
+    @GetMapping({"/products", "/products/"})
     public ResponseEntity<List<Product>> findAllProducts(){
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
@@ -35,5 +35,11 @@ public class ProductController {
     public ResponseEntity<Product> getProductById(@PathVariable("id") String id) {
         // Implementation to get product by ID
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping("/products/{name}")
+    public ResponseEntity<List<Product>> getProductByName(@PathVariable("name") String name) {
+        // Implementation to get product by name
+        return ResponseEntity.ok(productService.getProductByName(name));
     }
 }

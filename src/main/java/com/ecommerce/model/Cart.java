@@ -17,7 +17,7 @@ public class Cart {
     @Id
     private String id;
     private String userId;
-    private List<Product> productList;
+    private List<OrderItem> orderItemList;
     private double totalPrice;
 
     public String getId() {
@@ -35,13 +35,11 @@ public class Cart {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
-    public List<Product> getProductList() {
-        return productList;
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
     }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 
     public double getTotalPrice() {
