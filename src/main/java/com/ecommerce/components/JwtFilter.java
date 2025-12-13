@@ -56,6 +56,9 @@ public class JwtFilter extends OncePerRequestFilter {
             // 5. Load user from custom repository through CustomUserDetailsService
             UserDetails userDetails = userService.loadUserByUsername(userName);
 
+            System.out.println(token + " " + userDetails.getUsername());
+            System.out.println(jwtUtil.validateToken(token, userDetails.getUsername()));
+
             // 6. Validate token (signature + expiry)
             if (!jwtUtil.validateToken(token, userDetails.getUsername())) {
 

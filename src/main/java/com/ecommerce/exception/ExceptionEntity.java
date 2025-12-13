@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExceptionEntity {
     String message;
-    LocalDateTime localDateTime;
+    Date date;
     int statusCode;
 }

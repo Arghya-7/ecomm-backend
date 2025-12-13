@@ -16,6 +16,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,16 +34,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        if(userRepository.findById(user.getId()).isPresent()){
+        if(user.getId()!= null && userRepository.findById(user.getId()).isPresent()){
             throw new RuntimeException("User with ID " + user.getId() + " already exists.");
+        } else if (user.getEmail()!= null && userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("User with email " + user.getEmail() + " already exists.");
         }
+        user.setId(user.getId() + UUID.randomUUID().toString().replace("-",""));;
         user.setPassword(encryptionService.encrypt(user.getPassword()));
         return userRepository.save(user);
     }
 
     @Override
     public ObjectNode validateUser(User user) throws Exception {
-        if(userRepository.findById(user.getId()).isPresent()){
+        if(user.getId() != null && userRepository.findById(user.getId()).isPresent()){
             User existingUser = userRepository.findById(user.getId()).get();
             String decryptedPassword = encryptionService.decrypt(existingUser.getPassword());
             if(decryptedPassword.equals(user.getPassword())){
@@ -50,7 +54,15 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new RuntimeException("Invalid credentials for user ID " + user.getId());
             }
-        } else {
+        } else if(user.getEmail() != null && userRepository.findByEmail(user.getEmail()).isPresent()){
+            User existingUser = userRepository.findByEmail(user.getEmail()).get();
+            String decryptedPassword = encryptionService.decrypt(existingUser.getPassword());
+            if(decryptedPassword.equals(user.getPassword())){
+                return objectMapper.createObjectNode().put("token", jwtUtil.generateToken(existingUser.getId()));
+            } else {
+                throw new RuntimeException("Invalid credentials for user ID " + user.getId());
+            }
+        }  else {
             throw new RuntimeException("User with ID " + user.getId() + " does not exist.");
         }
     }

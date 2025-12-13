@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class UserController {
     UserService userService;
@@ -27,7 +28,7 @@ public class UserController {
         try{
             return ResponseEntity.ok(userService.createUser(user));
         } catch (Exception er){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(er.getMessage());
         }
     }
 
