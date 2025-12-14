@@ -92,4 +92,9 @@ public class UserServiceImpl implements UserService {
         System.out.println(user);
         return userRepository.findByEmail(user.getUsername()).orElseThrow(() ->new RuntimeException("User not found"));
     }
+
+    @Override
+    public boolean isEmailRegistered(String email) throws Exception {
+        return userRepository.findByEmail(email).isPresent();
+    }
 }

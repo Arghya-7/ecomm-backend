@@ -15,4 +15,5 @@ public interface UserService {
     ObjectNode validateUser(User user) throws Exception;
     public UserDetails loadUserByUsername(String username) throws Exception;
     public User getUserDetails();
+    public boolean isEmailRegistered(String email) throws Exception;
 }
