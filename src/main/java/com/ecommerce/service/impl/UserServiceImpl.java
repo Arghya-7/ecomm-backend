@@ -8,6 +8,8 @@ import com.ecommerce.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +81,15 @@ public class UserServiceImpl implements UserService {
                     .password(user.getPassword())
                     .build();
         }
+    }
+
+    @Override
+    public User getUserDetails(){
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        UserDetails user =
+                (UserDetails) auth.getPrincipal();
+        System.out.println(user);
+        return userRepository.findByEmail(user.getUsername()).orElseThrow(() ->new RuntimeException("User not found"));
     }
 }

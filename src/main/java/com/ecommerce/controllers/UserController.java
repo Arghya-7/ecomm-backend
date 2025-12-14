@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     UserService userService;
     ObjectMapper objectMapper;
+
     @Autowired
     public UserController(UserService userService, ObjectMapper objectMapper){
         this.userService = userService;
@@ -40,6 +41,15 @@ public class UserController {
         } catch (Exception er){
             return new ResponseEntity<>(objectMapper.createObjectNode().put("message",er.getMessage())
                                                     ,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getUserDetails")
+    public ResponseEntity<User> getUserDetails() {
+        try{
+            return ResponseEntity.ok(userService.getUserDetails());
+        } catch (Exception er){
+            throw new RuntimeException(er.getMessage());
         }
     }
 }

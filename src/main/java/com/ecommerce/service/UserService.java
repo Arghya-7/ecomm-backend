@@ -14,4 +14,5 @@ public interface UserService {
     User createUser(User user) throws  NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
     ObjectNode validateUser(User user) throws Exception;
     public UserDetails loadUserByUsername(String username) throws Exception;
+    public User getUserDetails();
 }
