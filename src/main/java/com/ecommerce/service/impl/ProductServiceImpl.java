@@ -5,7 +5,6 @@ import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -50,5 +49,12 @@ public class ProductServiceImpl implements ProductService {
         TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(name);
         Query query = TextQuery.queryText(criteria).sortByScore();
         return mongoTemplate.find(query, Product.class);
+    }
+
+    @Override
+    public double getTotalPrice(String productId, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        double price = product != null ? product.getPrice() : 0.0;
+        return price * quantity;
     }
 }

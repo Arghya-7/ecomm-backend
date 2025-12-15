@@ -9,4 +9,6 @@ public interface ProductService {
     public List<Product> getAllProducts();
     public Product getProductById(String id);
     public List<Product> getProductByName(String name);
+
+    double getTotalPrice(String productId, int quantity);
 }
