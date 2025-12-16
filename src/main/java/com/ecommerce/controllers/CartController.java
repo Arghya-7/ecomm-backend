@@ -27,7 +27,7 @@ public class CartController {
     }
 
     @PutMapping("/{productId}/{quantity}")
-    public ResponseEntity<Cart> addOrUpdateCartItem(String productId, int quantity) {
+    public ResponseEntity<Cart> addOrUpdateCartItem(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity) {
         try {
             Cart cart = cartService.addOrUpdateCartItem(productId, quantity);
             return ResponseEntity.ok(cart);

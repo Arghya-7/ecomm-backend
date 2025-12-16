@@ -16,4 +16,5 @@ public interface UserService {
     public UserDetails loadUserByUsername(String username) throws Exception;
     public User getUserDetails();
     public boolean isEmailRegistered(String email) throws Exception;
+    public User updateUser(User user) throws Exception;
 }

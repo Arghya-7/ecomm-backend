@@ -13,12 +13,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class User {
     @Id
-    String id;
-    String name;
+    private String id;
+    private String name;
     @Indexed(unique = true)
-    String email;
-    String password;
-    String address;
+    private String email;
+    private String password;
+    private String address;
+    private String phone;
     public String getId() {
         return id;
     }
@@ -48,5 +49,11 @@ public class User {
     }
     public void setAddress(String address) {
         this.address = address;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

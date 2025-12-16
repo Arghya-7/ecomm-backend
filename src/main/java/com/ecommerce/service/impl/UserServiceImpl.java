@@ -97,4 +97,9 @@ public class UserServiceImpl implements UserService {
     public boolean isEmailRegistered(String email) throws Exception {
         return userRepository.findByEmail(email).isPresent();
     }
+
+    @Override
+    public User updateUser(User user) throws Exception {
+        return userRepository.save(user);
+    }
 }

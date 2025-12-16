@@ -52,4 +52,15 @@ public class UserController {
             throw new RuntimeException(er.getMessage());
         }
     }
+
+    @PutMapping("/updateUserDetails")
+    public ResponseEntity<User> updateUserDetails(@RequestBody User user) {
+        try{
+            // Assuming there's an updateUser method in UserService
+            User updatedUser = userService.updateUser(user); // Replace with actual update method
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception er){
+            throw new RuntimeException(er.getMessage());
+        }
+    }
 }

@@ -12,4 +12,6 @@ public interface CartService {
     boolean clearCart();
 
     Cart incrementCartItemByOne(String productId);
+
+    Cart inactiveCart();
 }

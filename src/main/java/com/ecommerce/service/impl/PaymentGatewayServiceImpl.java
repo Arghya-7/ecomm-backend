@@ -1,15 +1,22 @@
 package com.ecommerce.service.impl;
 
 
+import com.ecommerce.enums.PAYMENT_STATUS;
 import com.ecommerce.model.OrderDetails;
 import com.ecommerce.model.OrderRequest;
+import com.ecommerce.model.payment.CashfreeOrderResponse;
+import com.ecommerce.repository.PaymentRepository;
+import com.ecommerce.service.OrderService;
 import com.ecommerce.service.PaymentGatewayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,6 +33,15 @@ public class PaymentGatewayServiceImpl implements PaymentGatewayService {
 
     @Value("${cashfree.return.url}")
     private String returnUrl;
+
+    PaymentRepository paymentRepository;
+    OrderService orderService;
+
+    @Autowired
+    public PaymentGatewayServiceImpl(PaymentRepository paymentRepository, OrderService orderService) {
+        this.orderService = orderService;
+        this.paymentRepository = paymentRepository;
+    }
 
 
     @Override
@@ -70,7 +86,11 @@ public class PaymentGatewayServiceImpl implements PaymentGatewayService {
     @Override
     public Object checkOrderStatus(OrderDetails orderRequest) {
         String url = "https://sandbox.cashfree.com/pg/orders/" + orderRequest.getOrderId();
-
+        Optional<CashfreeOrderResponse> existingOrder =
+                paymentRepository.findByOrderId(orderRequest.getOrderId());
+        if(existingOrder.isPresent()){
+            return existingOrder.get();
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-api-version", "2022-09-01");
         headers.set("x-client-id", appId);
@@ -80,10 +100,15 @@ public class PaymentGatewayServiceImpl implements PaymentGatewayService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url, HttpMethod.GET, entity, String.class
-        );
-
-        return response.getBody();
+        CashfreeOrderResponse response = restTemplate.exchange(
+                url, HttpMethod.GET, entity, CashfreeOrderResponse.class
+        ).getBody();
+        paymentRepository.save(Objects.requireNonNull(response));
+        if(response.getOrderStatus().equalsIgnoreCase("PAID")){
+            // Update order status in your system as needed
+            System.out.println("Payment successful for order ID: " + orderRequest.getOrderId());
+            orderService.changePaymentStatus(orderRequest.getOrderId(), PAYMENT_STATUS.PAID);
+        }
+        return response;
     }
 }
