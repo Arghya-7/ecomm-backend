@@ -5,6 +5,7 @@ import com.ecommerce.enums.PAYMENT_STATUS;
 import com.ecommerce.model.Order;
 import com.ecommerce.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping()
+//    @GetMapping()
     public ResponseEntity<List<Order>> getOrdersForUser() {
         try {
             return ResponseEntity.ok(orderService.getOrdersForUser());
@@ -66,6 +67,17 @@ public class OrderController {
     public ResponseEntity<Order> getOrderByPaymentId(@PathVariable("payment_id") String paymentId) {
         try {
             return ResponseEntity.ok(orderService.findByPaymentId(paymentId));
+        } catch (Exception er) {
+            throw new RuntimeException(er.getMessage());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<Page<Order>> getAllOrders(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam(defaultValue = "initiatedAt,desc") String sort) {
+        try {
+            return ResponseEntity.ok(orderService.getAllOrders(page, size, sort));
         } catch (Exception er) {
             throw new RuntimeException(er.getMessage());
         }

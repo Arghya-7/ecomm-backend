@@ -3,6 +3,7 @@ package com.ecommerce.service;
 import com.ecommerce.enums.PAYMENT_METHOD;
 import com.ecommerce.enums.PAYMENT_STATUS;
 import com.ecommerce.model.Order;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface OrderService {
     Order changePaymentStatus(String paymentId, PAYMENT_STATUS paymentStatus);
 
     Order findByPaymentId(String paymentId);
+
+    Page<Order> getAllOrders(int page, int size, String sorting);
 }
