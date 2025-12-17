@@ -4,6 +4,8 @@ import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 import org.springframework.data.mongodb.core.query.Query;
@@ -56,5 +58,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         double price = product != null ? product.getPrice() : 0.0;
         return price * quantity;
+    }
+
+    @Override
+    public Page<Product> getProductsPaginated(int page, int size, String text) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return productRepository.searchByText(".*" +text + ".*", pageRequest);
     }
 }

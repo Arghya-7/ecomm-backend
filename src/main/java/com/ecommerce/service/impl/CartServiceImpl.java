@@ -113,7 +113,10 @@ public class CartServiceImpl implements CartService {
         if(user != null){
             Cart cart = cartRepository.finByUserIdAndStatus(user.getId(), true).orElseThrow(() -> new RuntimeException("Cart not found"));
             cart.setActive(false);
-            return cartRepository.save(cart);
+            Cart inactivteCart = cartRepository.save(cart);
+            // Create a Blank cart for the user
+            createOrGetExistingCart();
+            return inactivteCart;
         }
         throw new RuntimeException("User not found");
     }

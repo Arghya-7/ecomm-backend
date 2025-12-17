@@ -3,6 +3,7 @@ package com.ecommerce.controllers;
 import com.ecommerce.model.Product;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +42,14 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProductByName(@PathVariable("name") String name) {
         // Implementation to get product by name
         return ResponseEntity.ok(productService.getProductByName(name));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<Product>> getProductsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "") String text) {
+        // Implementation to get paginated products
+        return ResponseEntity.ok(productService.getProductsPaginated(page, size, text));
     }
 }

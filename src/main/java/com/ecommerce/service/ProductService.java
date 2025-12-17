@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface ProductService {
     public List<Product> getProductByName(String name);
 
     double getTotalPrice(String productId, int quantity);
+    Page<Product> getProductsPaginated(int page, int size, String text);
 }
