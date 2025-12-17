@@ -47,10 +47,7 @@ public class ProductServiceImpl implements ProductService {
         if(name == null || name.isEmpty()){
             return getAllProducts();
         }
-        IndexOperations indexOps = mongoTemplate.indexOps("products");
-        TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(name);
-        Query query = TextQuery.queryText(criteria).sortByScore();
-        return mongoTemplate.find(query, Product.class);
+        return productRepository.findByKeyword(name);
     }
 
     @Override
