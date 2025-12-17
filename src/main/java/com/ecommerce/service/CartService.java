@@ -14,4 +14,6 @@ public interface CartService {
     Cart incrementCartItemByOne(String productId);
 
     Cart inactiveCart();
+
+    Cart getCart();
 }

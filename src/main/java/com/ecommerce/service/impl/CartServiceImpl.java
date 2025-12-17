@@ -121,6 +121,16 @@ public class CartServiceImpl implements CartService {
         throw new RuntimeException("User not found");
     }
 
+    @Override
+    public Cart getCart() {
+        User user = userService.getUserDetails();
+        if(user != null) {
+            Cart cart = cartRepository.finByUserIdAndStatus(user.getId(), true).orElse(new Cart());
+            return cart;
+        }
+        throw  new RuntimeException("User not found");
+    }
+
     private void calculateTotal(Cart cart) {
         if(cart != null && cart.getOrderItemList() == null){
             cart.setTotalPrice(0);

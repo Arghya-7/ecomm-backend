@@ -26,6 +26,16 @@ public class CartController {
         }
     }
 
+    @GetMapping()
+    public ResponseEntity<Cart> getCart() {
+        try {
+            Cart cart = cartService.getCart();
+            return ResponseEntity.ok(cart);
+        } catch (Exception er) {
+            throw new RuntimeException(er.getMessage());
+        }
+    }
+
     @PutMapping("/{productId}/{quantity}")
     public ResponseEntity<Cart> addOrUpdateCartItem(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity) {
         try {
