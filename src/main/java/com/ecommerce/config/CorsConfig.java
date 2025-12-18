@@ -17,11 +17,15 @@ public class CorsConfig {
     @Value("${app.frontend.url}")
     String frontendUrl;
 
+    @Value("${app.frontend.url.local}")
+    String frontendUrlLocal;
+
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         System.out.println("Frontend URL: " + frontendUrl);
-        config.setAllowedOrigins(List.of(frontendUrl));
+        config.setAllowedOrigins(List.of(frontendUrl, frontendUrlLocal));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(
                 "Authorization",
